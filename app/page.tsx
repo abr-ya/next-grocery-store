@@ -1,10 +1,18 @@
-import { Button } from "@/components/ui/button";
+import { getSlider } from "./_api/strapi";
+import { Slider } from "./_components";
 
-const Home = () => (
-  <main className="flex min-h-screen flex-col items-center p-24">
-    <h1 className="text-xl">Hello, Next 14 + Tailwind CSS!</h1>
-    <Button>First Button</Button>
-  </main>
-);
+const Home = async () => {
+  const sliderData = await getSlider();
+
+  return (
+    <main className="flex min-h-screen flex-col items-center p-4">
+      {/* Slider  */}
+      <Slider data={sliderData} />
+      {/* Category List  */}
+      {/* Product List */}
+      {/* Banner  */}
+    </main>
+  );
+};
 
 export default Home;

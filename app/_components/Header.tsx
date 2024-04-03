@@ -1,14 +1,10 @@
-import React from "react";
-import HeaderLeft from "./HeaderLeft";
-import HeaderRight from "./HeaderRight";
+import { HeaderLeft, HeaderRight } from ".";
 
-const Header = () => {
-  return (
-    <div className="p-5 shadow-sm flex justify-between">
-      <HeaderLeft />
-      <HeaderRight />
-    </div>
-  );
-};
+const Header = () => (
+  <div className="p-5 shadow-sm flex justify-between">
+    <HeaderLeft />
+    <HeaderRight />
+  </div>
+);
 
 export default Header;

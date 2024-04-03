@@ -1,4 +1,4 @@
-export interface IIcon {
+export interface IMedia {
   id: number;
   attributes: IIconAttributes;
 }
@@ -24,6 +24,7 @@ interface IIconAttributes {
 
 interface IIconFormats {
   small: IIconDetails;
+  media?: IIconDetails;
   thumbnail: IIconDetails;
 }
 

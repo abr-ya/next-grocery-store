@@ -1,4 +1,4 @@
-import { IIcon } from "./icon.interface";
+import { IMedia } from "./media.interface";
 
 export interface ICategory {
   id: number;
@@ -12,6 +12,6 @@ interface ICategoryAttributes {
   updatedAt: string;
   publishedAt: string;
   icon: {
-    data: IIcon[];
+    data: IMedia[];
   };
 }

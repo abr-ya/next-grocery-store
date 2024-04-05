@@ -5,7 +5,7 @@ const Home = async () => {
   const sliderData = await getSlider();
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-4">
+    <main className="flex p-8 px-16">
       {/* Slider  */}
       <Slider data={sliderData} />
       {/* Category List  */}

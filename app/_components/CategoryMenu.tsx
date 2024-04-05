@@ -1,6 +1,3 @@
-"use client";
-
-import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -13,22 +10,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { LayoutGrid } from "lucide-react";
 
-import { getCategory } from "../_api/strapi";
+import { getCategories } from "../_api/strapi";
 import { ICategory } from "../_interfaces/category.interface";
 
-const CategoryMenu = () => {
+const CategoryMenu = async () => {
   const backUrl = process.env.NEXT_PUBLIC_API_URL;
-  const [categoryList, setCategoryList] = useState<ICategory[]>([]);
-
-  useEffect(() => {
-    getCategoryList();
-  }, []);
-
-  const getCategoryList = () => {
-    getCategory().then((resp) => {
-      setCategoryList(resp.data.data);
-    });
-  };
+  const categoriesData: ICategory[] = await getCategories();
 
   return (
     <DropdownMenu>
@@ -40,7 +27,7 @@ const CategoryMenu = () => {
       <DropdownMenuContent>
         <DropdownMenuLabel>Browse Category</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {categoryList.map((category, index) => (
+        {categoriesData.map((category, index) => (
           <Link key={index} href={"/products-category/" + category.attributes.name}>
             <DropdownMenuItem className="flex gap-4 p-2 items-center cursor-pointer my-2 outline-none hover:bg-slate-200 rounded-xl">
               <Image

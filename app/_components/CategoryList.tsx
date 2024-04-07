@@ -11,8 +11,8 @@ const CategoryList: FC<ICategoryList> = ({ data }) => {
   const backUrl = process.env.NEXT_PUBLIC_API_URL;
 
   return (
-    <div className="mt-10">
-      <h2 className="text-green-600 font-bold text-2xl">Shop by Category</h2>
+    <div className="mt-8">
+      <h2 className="main-h2">Shop by Category</h2>
       <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7 gap-5 mt-2">
         {data.map((category) => (
           <Link

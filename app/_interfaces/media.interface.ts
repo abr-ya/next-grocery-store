@@ -24,7 +24,7 @@ interface IIconAttributes {
 
 interface IIconFormats {
   small: IIconDetails;
-  media?: IIconDetails;
+  medium: IIconDetails;
   thumbnail: IIconDetails;
 }
 

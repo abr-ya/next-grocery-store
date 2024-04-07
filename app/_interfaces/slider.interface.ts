@@ -6,12 +6,12 @@ interface ISlideAttributes {
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
-  image: {
+  images: {
     data: IMedia[];
   };
 }
 
-export interface ISlideData {
+export interface ISliderData {
   id: number;
   attributes: ISlideAttributes;
 }

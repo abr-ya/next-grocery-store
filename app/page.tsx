@@ -2,7 +2,7 @@ import { getCategories, getSlider } from "./_api/strapi";
 import { CategoryList, Slider } from "./_components";
 
 const Home = async () => {
-  const sliderData = await getSlider();
+  const sliderData = await getSlider(1);
   const categoriesData = await getCategories(); // todo: один запрос вместо двух (+ Header)
 
   return (

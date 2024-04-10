@@ -9,6 +9,9 @@ export interface IProduct {
 interface IProductAttributes {
   title: string;
   description: string;
+  mrp: number;
+  price: number;
+  quantityType: string;
   slug: string;
   createdAt: string;
   updatedAt: string;

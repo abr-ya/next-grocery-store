@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { getCategories, getProducts, getSlider } from "./_api/strapi";
 import { CategoryList, ProductList, Slider } from "./_components";
 
@@ -15,6 +17,7 @@ const Home = async () => {
       {/* Product List */}
       <ProductList data={productsData} />
       {/* Banner  */}
+      <Image src="/banner.png" width={1000} height={300} alt="banner" className="w-full h-[400px] object-contain" />
     </main>
   );
 };

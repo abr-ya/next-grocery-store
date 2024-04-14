@@ -28,7 +28,7 @@ const CategoryMenu = async () => {
         <DropdownMenuLabel>Browse Category</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {categoriesData.map((category, index) => (
-          <Link key={index} href={"/products-category/" + category.attributes.name}>
+          <Link key={index} href={`/category/${category.attributes.name}`}>
             <DropdownMenuItem className="flex gap-4 p-2 items-center cursor-pointer my-2 outline-none hover:bg-slate-200 rounded-xl">
               <Image
                 src={`${backUrl}${category?.attributes?.icon?.data[0].attributes?.url}`}

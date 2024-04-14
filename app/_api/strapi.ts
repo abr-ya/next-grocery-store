@@ -10,3 +10,6 @@ export const getCategories = () =>
 export const getSlider = (id: number) => axiosClient.get(`/sliders/${id}?populate=*`).then((resp) => resp.data.data);
 
 export const getProducts = () => axiosClient.get("/products?populate=*").then((resp) => resp.data.data);
+
+export const getProductsByCategory = (category: string) =>
+  axiosClient.get(`/products?filters[categories][name][$in]=${category}&populate=*`).then((resp) => resp.data.data);

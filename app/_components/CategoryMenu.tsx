@@ -12,9 +12,9 @@ import { LayoutGrid } from "lucide-react";
 
 import { getCategories } from "../_api/strapi";
 import { ICategory } from "../_interfaces/category.interface";
+import { gitCatImgSrc } from "../_utils/utils";
 
 const CategoryMenu = async () => {
-  const backUrl = process.env.NEXT_PUBLIC_API_URL;
   const categoriesData: ICategory[] = await getCategories();
 
   return (
@@ -30,13 +30,7 @@ const CategoryMenu = async () => {
         {categoriesData.map((category, index) => (
           <Link key={index} href={`/category/${category.attributes.name}`}>
             <DropdownMenuItem className="flex gap-4 p-2 items-center cursor-pointer my-2 outline-none hover:bg-slate-200 rounded-xl">
-              <Image
-                src={`${backUrl}${category?.attributes?.icon?.data[0].attributes?.url}`}
-                unoptimized={true}
-                alt="icon"
-                width={30}
-                height={30}
-              />
+              <Image src={gitCatImgSrc(category)} unoptimized={true} alt="icon" width={30} height={30} />
               <h2 className="">{category.attributes.name}</h2>
             </DropdownMenuItem>
           </Link>

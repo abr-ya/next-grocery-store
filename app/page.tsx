@@ -15,7 +15,7 @@ const Home = async () => {
       {/* Category List  */}
       <CategoryList data={categoriesData} />
       {/* Product List */}
-      <ProductList data={productsData} />
+      <ProductList data={productsData} title="Our Popular Products" />
       {/* Banner  */}
       <Image src="/banner.png" width={1000} height={300} alt="banner" className="w-full h-[400px] object-contain" />
     </main>

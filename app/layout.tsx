@@ -1,8 +1,9 @@
+import { PropsWithChildren } from "react";
 import { Outfit } from "next/font/google";
 import type { Metadata } from "next";
-import { PropsWithChildren } from "react";
+
+import { Footer, Header } from "./_components";
 import "./globals.css";
-import Header from "./_components/Header";
 
 const font = Outfit({ subsets: ["latin"], weight: ["300", "400", "700", "900"] });
 
@@ -16,6 +17,7 @@ const RootLayout = ({ children }: PropsWithChildren) => (
     <body className={font.className}>
       <Header />
       {children}
+      <Footer />
     </body>
   </html>
 );

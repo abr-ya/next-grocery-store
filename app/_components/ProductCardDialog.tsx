@@ -1,8 +1,9 @@
 import { FC } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
+
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 import { IProduct } from "../_interfaces/product.interface";
-import { Button } from "@/components/ui/button";
 import ProductDetail from "./ProductDetail";
 
 interface IProductCardDialog {
@@ -17,11 +18,7 @@ const ProductCardDialog: FC<IProductCardDialog> = ({ product }) => (
       </Button>
     </DialogTrigger>
     <DialogContent>
-      <DialogHeader>
-        <DialogDescription>
-          <ProductDetail product={product} />
-        </DialogDescription>
-      </DialogHeader>
+      <ProductDetail product={product} />
     </DialogContent>
   </Dialog>
 );

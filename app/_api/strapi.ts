@@ -1,4 +1,5 @@
 import axios from "axios";
+import { ILoginPayload, IRegisterPayload } from "../_interfaces/user.interface";
 
 const baseURL = `${process.env.NEXT_PUBLIC_API_URL}/api`;
 
@@ -13,3 +14,7 @@ export const getProducts = () => axiosClient.get("/products?populate=*").then((r
 
 export const getProductsByCategory = (category: string) =>
   axiosClient.get(`/products?filters[categories][name][$in]=${category}&populate=*`).then((resp) => resp.data.data);
+
+export const registerRequest = (data: IRegisterPayload) => axiosClient.post("/auth/local/register", data);
+
+export const loginRequest = (data: ILoginPayload) => axiosClient.post("/auth/local", data);

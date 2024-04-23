@@ -2,6 +2,7 @@ import { PropsWithChildren } from "react";
 import { Outfit } from "next/font/google";
 import type { Metadata } from "next";
 
+import { Toaster } from "@/components/ui/sonner";
 import { Footer, Header } from "./_components";
 import "./globals.css";
 
@@ -18,6 +19,7 @@ const RootLayout = ({ children }: PropsWithChildren) => (
       <Header />
       {children}
       <Footer />
+      <Toaster />
     </body>
   </html>
 );

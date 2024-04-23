@@ -3,12 +3,17 @@
 import { FieldErrors, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { toast } from "sonner";
+import { getCookie, setCookie } from "cookies-next";
+import { useRouter } from "next/navigation";
 
 import FormWrapper from "../_components/FormWrapper";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { LoaderIcon } from "lucide-react";
 import LinkBlock from "../_components/LinkBlock";
+import { useEffect, useState } from "react";
+import { registerRequest } from "@/app/_api/strapi";
 
 interface IFormData {
   email: string;
@@ -23,16 +28,37 @@ const schema = yup.object({
 });
 
 const Register = () => {
+  const router = useRouter();
+
+  useEffect(() => {
+    const jwt = getCookie("jwt");
+    if (jwt) router.push("/");
+  }, []);
+
+  const [isLoading, setIsLoading] = useState(false);
+
   const defaultValues = { email: "", password: "", name: "" };
 
   const { register, handleSubmit } = useForm<IFormData>({ defaultValues, resolver: yupResolver(schema) });
 
-  const onSubmit = (params: IFormData) => {
-    console.log(params);
+  const onSubmit = ({ email, password, name }: IFormData) => {
+    console.log("register", email, password, name);
+    setIsLoading(true);
+    registerRequest({ email, password, username: name })
+      .then(({ data }) => {
+        setCookie("user", JSON.stringify(data.user));
+        setCookie("jwt", data.jwt);
+        toast("Account Created Successfully");
+        router.push("/");
+      })
+      .catch((e) => {
+        toast(e?.response?.data?.error?.message);
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
   const onError = (errors: FieldErrors<IFormData>) => console.log(errors);
-
-  const isLoading = false;
 
   return (
     <FormWrapper title="Create an Account" description="Enter your Email and Password to Create an account">

@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+
 import {
   Sheet,
   SheetClose,
@@ -8,16 +9,35 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import TopMenu from "./TopMenu";
+import UserMenu from "./UserMenu";
 import { ShoppingBasket } from "lucide-react";
 import CartAsList from "./CartAsList";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { getCookie } from "cookies-next";
+import { useEffect } from "react";
 
 const HeaderRight = () => {
+  const jwt = getCookie("jwt");
+
+  useEffect(() => {
+    console.log(jwt);
+  }, []);
+
+  // todo: temp!
   const totalCartItem = 10;
-  const isLogin = false;
   const subtotal = 50;
+
+  console.log(jwt);
+
+  const renderUserButton = () =>
+    !jwt ? (
+      <Link href={"/login"}>
+        <Button>Login</Button>
+      </Link>
+    ) : (
+      <UserMenu />
+    );
 
   return (
     <div className="flex gap-5 items-center">
@@ -46,14 +66,7 @@ const HeaderRight = () => {
           </SheetClose>
         </SheetContent>
       </Sheet>
-
-      {!isLogin ? (
-        <Link href={"/sign-in"}>
-          <Button>Login</Button>
-        </Link>
-      ) : (
-        <TopMenu />
-      )}
+      {renderUserButton()}
     </div>
   );
 };

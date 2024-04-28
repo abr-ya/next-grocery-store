@@ -16,19 +16,19 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { getCookie } from "cookies-next";
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 const HeaderRight = () => {
+  const pathname = usePathname();
   const jwt = getCookie("jwt");
 
   useEffect(() => {
-    console.log(jwt);
-  }, []);
+    console.log(jwt ? "isUser" : "isGuest");
+  }, [pathname]);
 
   // todo: temp!
   const totalCartItem = 10;
   const subtotal = 50;
-
-  console.log(jwt);
 
   const renderUserButton = () =>
     !jwt ? (

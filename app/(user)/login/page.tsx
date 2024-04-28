@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -12,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { LoaderIcon } from "lucide-react";
 import LinkBlock from "../_components/LinkBlock";
-import { useEffect, useState } from "react";
+
 import { loginRequest } from "@/app/_api/strapi";
 
 interface IFormData {

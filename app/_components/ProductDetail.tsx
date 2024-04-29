@@ -6,6 +6,11 @@ import { useRouter } from "next/navigation";
 import { IProduct } from "../_interfaces/product.interface";
 import { Button } from "@/components/ui/button";
 import { LoaderCircle, ShoppingBasket } from "lucide-react";
+import { getCookie } from "cookies-next";
+import { IAddToCartData } from "../_interfaces/cart.interface";
+import { addToCartRequest } from "../_api/strapi";
+import { toast } from "sonner";
+import { IUser } from "../_interfaces/user.interface";
 
 interface IProductDetail {
   product: IProduct;
@@ -13,7 +18,15 @@ interface IProductDetail {
 
 const ProductDetail: FC<IProductDetail> = ({ product }) => {
   const backUrl = process.env.NEXT_PUBLIC_API_URL;
-  const isUser = true; // todo temp
+
+  const jwt = getCookie("jwt");
+  let user: IUser | null = null;
+  // todo: переписать проверку?
+  try {
+    user = JSON.parse(getCookie("user") as string);
+  } catch (e) {
+    /* empty */
+  }
 
   const router = useRouter();
   const [quantity, setQuantity] = useState(1);
@@ -22,21 +35,32 @@ const ProductDetail: FC<IProductDetail> = ({ product }) => {
   const getAmount = () => (quantity * product.attributes.price || product.attributes.mrp).toFixed(2);
 
   const addToCart = () => {
-    if (!isUser) {
-      router.push("/sign-in");
+    console.log(jwt);
+    if (!jwt || !user) {
+      router.push("/login");
       return;
     }
 
     setLoading(true);
-    const data = {
+    const data: IAddToCartData = {
       quantity,
       amount: getAmount(),
-      products: product.id,
-      users_permissions_users: "todo",
-      userId: "todo",
+      product: product.id,
+      users_permissions_users: user.id,
+      userId: user.id,
     };
-    console.log(data);
-    // todo: request
+    addToCartRequest(data, jwt)
+      .then((resp) => {
+        console.log("Added to Cart:", resp);
+        toast("Added to Cart");
+      })
+      .catch((e) => {
+        console.log("addToCartRequest", e);
+        toast("Error while adding into cart");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (

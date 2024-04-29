@@ -1,5 +1,6 @@
 import axios from "axios";
 import { ILoginPayload, IRegisterPayload } from "../_interfaces/user.interface";
+import { IAddToCartData } from "../_interfaces/cart.interface";
 
 const baseURL = `${process.env.NEXT_PUBLIC_API_URL}/api`;
 
@@ -18,3 +19,6 @@ export const getProductsByCategory = (category: string) =>
 export const registerRequest = (data: IRegisterPayload) => axiosClient.post("/auth/local/register", data);
 
 export const loginRequest = (data: ILoginPayload) => axiosClient.post("/auth/local", data);
+
+export const addToCartRequest = (data: IAddToCartData, jwt: string) =>
+  axiosClient.post("/user-carts", { data }, { headers: { Authorization: "Bearer " + jwt } });

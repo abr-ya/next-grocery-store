@@ -17,28 +17,25 @@ import Link from "next/link";
 import { getCookie } from "cookies-next";
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { getUserCartRequest } from "../_api/strapi";
 import { getUserFromCookies } from "../_utils/utils";
 import { IUser } from "../_interfaces/user.interface";
+import useCart from "../_hooks/useCart";
+import { TextLoader } from ".";
 
 const HeaderRight = () => {
   const pathname = usePathname();
   const jwt = getCookie("jwt");
   const user: IUser | null = getUserFromCookies();
 
+  const { loading, data } = useCart(user?.id || 0, jwt || "");
+
   useEffect(() => {
     console.log(jwt ? "isUser" : "isGuest");
-    if (jwt && user) getUserCart(user.id, jwt);
+    // if (jwt && user) getUserCart(user.id, jwt); // todo: move to ??
   }, [pathname]);
 
   // todo: temp!
-  const totalCartItem = 10;
   const subtotal = 50;
-
-  const getUserCart = async (userId: number, token: string) => {
-    const userCart = await getUserCartRequest(userId, token);
-    console.log(userCart);
-  };
 
   const renderUserButton = () =>
     !jwt ? (
@@ -55,7 +52,9 @@ const HeaderRight = () => {
         <SheetTrigger>
           <h2 className="flex gap-2 items-center text-lg">
             <ShoppingBasket className="h-7 w-7" />
-            <span className="bg-primary text-white  px-2 rounded-full">{totalCartItem}</span>
+            <span className="bg-primary text-white  px-2 rounded-full">
+              <TextLoader loading={loading} text={data?.length} />
+            </span>
           </h2>
         </SheetTrigger>
         <SheetContent>

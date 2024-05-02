@@ -5,13 +5,14 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { IProduct } from "../_interfaces/product.interface";
 import { Button } from "@/components/ui/button";
-import { LoaderCircle, ShoppingBasket } from "lucide-react";
+import { ShoppingBasket } from "lucide-react";
 import { getCookie } from "cookies-next";
 import { IAddToCartData } from "../_interfaces/cart.interface";
 import { addToCartRequest } from "../_api/strapi";
 import { toast } from "sonner";
 import { IUser } from "../_interfaces/user.interface";
 import { getUserFromCookies } from "../_utils/utils";
+import { TextLoader } from ".";
 
 interface IProductDetail {
   product: IProduct;
@@ -91,7 +92,7 @@ const ProductDetail: FC<IProductDetail> = ({ product }) => {
           </div>
           <Button className="flex gap-3" onClick={() => addToCart()} disabled={loading}>
             <ShoppingBasket />
-            {loading ? <LoaderCircle className="animate-spin" /> : "Add to Cart"}
+            <TextLoader loading={loading} text="Add to Cart" />
           </Button>
         </div>
         <span>

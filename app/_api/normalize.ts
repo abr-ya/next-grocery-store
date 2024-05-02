@@ -1,7 +1,7 @@
-import { ICartItem } from "../_interfaces/cart.interface";
+import { IAppCartItem, ICartItem } from "../_interfaces/cart.interface";
 
 export const normalizeCartItem = (item: ICartItem) => {
-  const newItem = {
+  const newItem: IAppCartItem = {
     id: item.id,
     title: item.attributes.product.data.attributes.title,
     quantity: item.attributes.quantity,

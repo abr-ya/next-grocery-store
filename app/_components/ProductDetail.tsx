@@ -11,6 +11,7 @@ import { IAddToCartData } from "../_interfaces/cart.interface";
 import { addToCartRequest } from "../_api/strapi";
 import { toast } from "sonner";
 import { IUser } from "../_interfaces/user.interface";
+import { getUserFromCookies } from "../_utils/utils";
 
 interface IProductDetail {
   product: IProduct;
@@ -20,13 +21,8 @@ const ProductDetail: FC<IProductDetail> = ({ product }) => {
   const backUrl = process.env.NEXT_PUBLIC_API_URL;
 
   const jwt = getCookie("jwt");
-  let user: IUser | null = null;
-  // todo: переписать проверку?
-  try {
-    user = JSON.parse(getCookie("user") as string);
-  } catch (e) {
-    /* empty */
-  }
+  const user: IUser | null = getUserFromCookies();
+  console.log("ProductDetail, user: ", user);
 
   const router = useRouter();
   const [quantity, setQuantity] = useState(1);

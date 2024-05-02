@@ -1,6 +1,7 @@
 import axios from "axios";
 import { ILoginPayload, IRegisterPayload } from "../_interfaces/user.interface";
-import { IAddToCartData } from "../_interfaces/cart.interface";
+import { IAddToCartData, ICartItem } from "../_interfaces/cart.interface";
+import { normalizeCartItem } from "./normalize";
 
 const baseURL = `${process.env.NEXT_PUBLIC_API_URL}/api`;
 
@@ -16,9 +17,26 @@ export const getProducts = () => axiosClient.get("/products?populate=*").then((r
 export const getProductsByCategory = (category: string) =>
   axiosClient.get(`/products?filters[categories][name][$in]=${category}&populate=*`).then((resp) => resp.data.data);
 
+// user
 export const registerRequest = (data: IRegisterPayload) => axiosClient.post("/auth/local/register", data);
 
 export const loginRequest = (data: ILoginPayload) => axiosClient.post("/auth/local", data);
 
+// cart
 export const addToCartRequest = (data: IAddToCartData, jwt: string) =>
   axiosClient.post("/user-carts", { data }, { headers: { Authorization: "Bearer " + jwt } });
+
+export const getUserCartRequest = (userId: number, jwt: string) => {
+  const filters = `filters[userId][$eq]=${userId}`;
+  const populate = "[populate][product][populate][images][populate]";
+
+  return axiosClient
+    .get(`/user-carts?${filters}&${populate}`, {
+      headers: { Authorization: "Bearer " + jwt },
+    })
+    .then((resp) => {
+      const data: ICartItem[] = resp.data.data;
+
+      return data.map((item) => normalizeCartItem(item));
+    });
+};

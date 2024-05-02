@@ -17,18 +17,28 @@ import Link from "next/link";
 import { getCookie } from "cookies-next";
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { getUserCartRequest } from "../_api/strapi";
+import { getUserFromCookies } from "../_utils/utils";
+import { IUser } from "../_interfaces/user.interface";
 
 const HeaderRight = () => {
   const pathname = usePathname();
   const jwt = getCookie("jwt");
+  const user: IUser | null = getUserFromCookies();
 
   useEffect(() => {
     console.log(jwt ? "isUser" : "isGuest");
+    if (jwt && user) getUserCart(user.id, jwt);
   }, [pathname]);
 
   // todo: temp!
   const totalCartItem = 10;
   const subtotal = 50;
+
+  const getUserCart = async (userId: number, token: string) => {
+    const userCart = await getUserCartRequest(userId, token);
+    console.log(userCart);
+  };
 
   const renderUserButton = () =>
     !jwt ? (

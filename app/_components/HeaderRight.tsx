@@ -1,22 +1,15 @@
 "use client";
 
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import UserMenu from "./UserMenu";
 import { ShoppingBasket } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { getCookie } from "cookies-next";
+
+import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import UserMenu from "./UserMenu";
 import CartAsList from "./CartAsList";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { getCookie } from "cookies-next";
 import { useEffect } from "react";
-import { usePathname } from "next/navigation";
 import { getUserFromCookies } from "../_utils/utils";
 import { IUser } from "../_interfaces/user.interface";
 import useCart from "../_hooks/useCart";
@@ -31,11 +24,9 @@ const HeaderRight = () => {
 
   useEffect(() => {
     console.log(jwt ? "isUser" : "isGuest");
-    // if (jwt && user) getUserCart(user.id, jwt); // todo: move to ??
   }, [pathname]);
 
-  // todo: temp!
-  const subtotal = 50;
+  const subtotal = data.reduce((sum, el) => sum + el.amount, 0);
 
   const renderUserButton = () =>
     !jwt ? (
@@ -46,8 +37,10 @@ const HeaderRight = () => {
       <UserMenu />
     );
 
-  return (
-    <div className="flex gap-5 items-center">
+  const renderCartSheet = () => {
+    if (!jwt) return null;
+
+    return (
       <Sheet>
         <SheetTrigger>
           <h2 className="flex gap-2 items-center text-lg">
@@ -60,10 +53,8 @@ const HeaderRight = () => {
         <SheetContent>
           <SheetHeader>
             <SheetTitle className="bg-primary text-white font-bold text-lg p-2">My Cart</SheetTitle>
-            <SheetDescription>
-              <CartAsList cartItemList={false} onDeleteItem={false} />
-            </SheetDescription>
           </SheetHeader>
+          <CartAsList cartItemList={false} onDeleteItem={false} />
           <SheetClose asChild>
             <div className="absolute w-[90%] bottom-6 flex flex-col">
               <h2 className="text-lg font-bold flex justify-between">
@@ -75,6 +66,12 @@ const HeaderRight = () => {
           </SheetClose>
         </SheetContent>
       </Sheet>
+    );
+  };
+
+  return (
+    <div className="flex gap-5 items-center">
+      {renderCartSheet()}
       {renderUserButton()}
     </div>
   );

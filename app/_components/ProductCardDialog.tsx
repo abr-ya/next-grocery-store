@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 
 import { IProduct } from "../_interfaces/product.interface";
 import ProductDetail from "./ProductDetail";
+import ClientOnly from "./ClientOnly";
+import { CartProvider } from "../_context/cartContext";
 
 interface IProductCardDialog {
   product: IProduct;
@@ -18,7 +20,11 @@ const ProductCardDialog: FC<IProductCardDialog> = ({ product }) => (
       </Button>
     </DialogTrigger>
     <DialogContent>
-      <ProductDetail product={product} />
+      <ClientOnly>
+        <CartProvider>
+          <ProductDetail product={product} />
+        </CartProvider>
+      </ClientOnly>
     </DialogContent>
   </Dialog>
 );

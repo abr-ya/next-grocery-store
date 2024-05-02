@@ -9,22 +9,27 @@ import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger 
 import UserMenu from "./UserMenu";
 import CartAsList from "./CartAsList";
 import { Button } from "@/components/ui/button";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { getUserFromCookies } from "../_utils/utils";
 import { IUser } from "../_interfaces/user.interface";
-import useCart from "../_hooks/useCart";
 import { TextLoader } from ".";
+import CartContext from "../_context/cartContext";
 
 const HeaderRight = () => {
   const pathname = usePathname();
   const jwt = getCookie("jwt");
   const user: IUser | null = getUserFromCookies();
 
-  const { loading, data } = useCart(user?.id || 0, jwt || "");
+  const { getUserCart, data, loading, count } = useContext(CartContext);
 
   useEffect(() => {
     console.log(jwt ? "isUser" : "isGuest");
+    getUserCart(user?.id, jwt);
   }, [pathname]);
+
+  useEffect(() => {
+    console.log(count);
+  }, [count]);
 
   const subtotal = data.reduce((sum, el) => sum + el.amount, 0);
 
@@ -37,7 +42,7 @@ const HeaderRight = () => {
       <UserMenu />
     );
 
-  const renderCartSheet = () => {
+  const renderCartSheet = (count: number) => {
     if (!jwt) return null;
 
     return (
@@ -46,7 +51,7 @@ const HeaderRight = () => {
           <h2 className="flex gap-2 items-center text-lg">
             <ShoppingBasket className="h-7 w-7" />
             <span className="bg-primary text-white  px-2 rounded-full">
-              <TextLoader loading={loading} text={data?.length} />
+              <TextLoader loading={loading} text={count} />
             </span>
           </h2>
         </SheetTrigger>
@@ -71,7 +76,7 @@ const HeaderRight = () => {
 
   return (
     <div className="flex gap-5 items-center">
-      {renderCartSheet()}
+      {renderCartSheet(count)}
       {renderUserButton()}
     </div>
   );

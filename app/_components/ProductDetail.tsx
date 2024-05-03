@@ -1,6 +1,6 @@
 "use client";
 
-import React, { FC, useState } from "react";
+import React, { FC, useContext, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { IProduct } from "../_interfaces/product.interface";
@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { IUser } from "../_interfaces/user.interface";
 import { getUserFromCookies } from "../_utils/utils";
 import { TextLoader } from ".";
+import CartContext from "../_context/cartContext";
 
 interface IProductDetail {
   product: IProduct;
@@ -23,7 +24,8 @@ const ProductDetail: FC<IProductDetail> = ({ product }) => {
 
   const jwt = getCookie("jwt");
   const user: IUser | null = getUserFromCookies();
-  console.log("ProductDetail, user: ", user);
+
+  const { getUserCart } = useContext(CartContext);
 
   const router = useRouter();
   const [quantity, setQuantity] = useState(1);
@@ -32,7 +34,6 @@ const ProductDetail: FC<IProductDetail> = ({ product }) => {
   const getAmount = () => (quantity * product.attributes.price || product.attributes.mrp).toFixed(2);
 
   const addToCart = () => {
-    console.log(jwt);
     if (!jwt || !user) {
       router.push("/login");
       return;
@@ -48,7 +49,7 @@ const ProductDetail: FC<IProductDetail> = ({ product }) => {
     };
     addToCartRequest(data, jwt)
       .then((resp) => {
-        console.log("Added to Cart:", resp);
+        console.log("Added to Cart result:", resp);
         toast("Added to Cart");
       })
       .catch((e) => {
@@ -57,6 +58,7 @@ const ProductDetail: FC<IProductDetail> = ({ product }) => {
       })
       .finally(() => {
         setLoading(false);
+        getUserCart(user?.id, jwt);
       });
   };
 

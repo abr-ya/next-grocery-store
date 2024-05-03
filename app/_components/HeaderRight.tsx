@@ -1,5 +1,6 @@
 "use client";
 
+import { useContext, useEffect } from "react";
 import { ShoppingBasket } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -9,35 +10,34 @@ import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger 
 import UserMenu from "./UserMenu";
 import CartAsList from "./CartAsList";
 import { Button } from "@/components/ui/button";
-import { useEffect } from "react";
 import { getUserFromCookies } from "../_utils/utils";
 import { IUser } from "../_interfaces/user.interface";
-import useCart from "../_hooks/useCart";
 import { TextLoader } from ".";
+import CartContext from "../_context/cartContext";
 
 const HeaderRight = () => {
   const pathname = usePathname();
   const jwt = getCookie("jwt");
   const user: IUser | null = getUserFromCookies();
 
-  const { loading, data } = useCart(user?.id || 0, jwt || "");
+  const { getUserCart, data, loading, count } = useContext(CartContext);
 
   useEffect(() => {
-    console.log(jwt ? "isUser" : "isGuest");
-  }, [pathname]);
+    console.log(pathname, jwt ? "isUser" : "isGuest");
+    if (user?.id && jwt) getUserCart(user?.id, jwt);
+  }, [jwt]);
 
   const subtotal = data.reduce((sum, el) => sum + el.amount, 0);
 
-  const renderUserButton = () =>
-    !jwt ? (
-      <Link href={"/login"}>
-        <Button>Login</Button>
-      </Link>
-    ) : (
-      <UserMenu />
-    );
+  const renderUserButton = () => {
+    // only for compact)
+    // eslint-disable-next-line prettier/prettier
+    if (!jwt) return <Link href={"/login"}><Button>Login</Button></Link>;
 
-  const renderCartSheet = () => {
+    return <UserMenu />;
+  };
+
+  const renderCartSheet = (count: number) => {
     if (!jwt) return null;
 
     return (
@@ -46,7 +46,7 @@ const HeaderRight = () => {
           <h2 className="flex gap-2 items-center text-lg">
             <ShoppingBasket className="h-7 w-7" />
             <span className="bg-primary text-white  px-2 rounded-full">
-              <TextLoader loading={loading} text={data?.length} />
+              <TextLoader loading={loading} text={count} />
             </span>
           </h2>
         </SheetTrigger>
@@ -71,7 +71,7 @@ const HeaderRight = () => {
 
   return (
     <div className="flex gap-5 items-center">
-      {renderCartSheet()}
+      {renderCartSheet(count)}
       {renderUserButton()}
     </div>
   );

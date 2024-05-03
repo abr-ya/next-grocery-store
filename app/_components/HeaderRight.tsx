@@ -20,7 +20,7 @@ const HeaderRight = () => {
   const jwt = getCookie("jwt");
   const user: IUser | null = getUserFromCookies();
 
-  const { getUserCart, data, loading, count } = useContext(CartContext);
+  const { deleteFromCart, getUserCart, data, loading, count } = useContext(CartContext);
 
   useEffect(() => {
     console.log(pathname, jwt ? "isUser" : "isGuest");
@@ -31,6 +31,11 @@ const HeaderRight = () => {
 
   const deleteItemHandler = (id: number) => {
     console.log("delete", id);
+    if (user?.id && jwt) {
+      deleteFromCart(id, user?.id, jwt);
+    } else {
+      console.log("Can't delete == no token or userId");
+    }
   };
 
   const renderUserButton = () => {

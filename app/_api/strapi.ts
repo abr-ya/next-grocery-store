@@ -5,6 +5,8 @@ import { normalizeCartItem } from "./normalize";
 
 const baseURL = `${process.env.NEXT_PUBLIC_API_URL}/api`;
 
+const optWithAuth = (token: string) => ({ headers: { Authorization: `Bearer ${token}` } });
+
 const axiosClient = axios.create({ baseURL });
 
 export const getCategories = () =>
@@ -24,19 +26,18 @@ export const loginRequest = (data: ILoginPayload) => axiosClient.post("/auth/loc
 
 // cart
 export const addToCartRequest = (data: IAddToCartData, jwt: string) =>
-  axiosClient.post("/user-carts", { data }, { headers: { Authorization: "Bearer " + jwt } });
+  axiosClient.post("/user-carts", { data }, optWithAuth(jwt));
 
 export const getUserCartRequest = (userId: number, jwt: string) => {
   const filters = `filters[userId][$eq]=${userId}`;
   const populate = "[populate][product][populate][images][populate]";
 
-  return axiosClient
-    .get(`/user-carts?${filters}&${populate}`, {
-      headers: { Authorization: "Bearer " + jwt },
-    })
-    .then((resp) => {
-      const data: ICartItem[] = resp.data.data;
+  return axiosClient.get(`/user-carts?${filters}&${populate}`, optWithAuth(jwt)).then((resp) => {
+    const data: ICartItem[] = resp.data.data;
 
-      return data.map((item) => normalizeCartItem(item));
-    });
+    return data.map((item) => normalizeCartItem(item));
+  });
 };
+
+export const delFromCartRequest = (id: number, jwt: string) =>
+  axiosClient.delete(`/user-carts/${id}`, optWithAuth(jwt));

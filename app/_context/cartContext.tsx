@@ -1,7 +1,7 @@
 "use client";
 
 import { FC, ReactNode, createContext, useState } from "react";
-import { addToCartRequest, getUserCartRequest } from "../_api/strapi";
+import { addToCartRequest, delFromCartRequest, getUserCartRequest } from "../_api/strapi";
 import { IAddToCartData, IAppCartItem } from "../_interfaces/cart.interface";
 import { toast } from "sonner";
 
@@ -12,6 +12,7 @@ const CartContext = createContext<CartContextType>({
   count: 0,
   loading: false,
   addToCart: async () => undefined,
+  deleteFromCart: async () => undefined,
   getUserCart: async () => undefined,
 });
 
@@ -60,7 +61,24 @@ export const CartManager = (initialCart: IAppCartItem[]) => {
       });
   };
 
-  return { data, count, loading, addToCart, getUserCart };
+  const deleteFromCart = async (id: number, userId: number, token: string) => {
+    setLoading(true);
+    delFromCartRequest(id, token)
+      .then((resp) => {
+        console.log("Deleted from Cart result:", resp);
+        toast("Deleted from Cart");
+      })
+      .catch((e) => {
+        console.log("deleteFromCart", e);
+        toast("Error while deleted from Cart");
+      })
+      .finally(() => {
+        setLoading(false);
+        getUserCart(userId, token);
+      });
+  };
+
+  return { data, count, loading, addToCart, deleteFromCart, getUserCart };
 };
 
 export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => (

@@ -1,5 +1,4 @@
 import { HeaderLeft, HeaderRight } from ".";
-import { CartProvider } from "../_context/cartContext";
 import ClientOnly from "./ClientOnly";
 
 const Header = () => (
@@ -7,9 +6,7 @@ const Header = () => (
     <HeaderLeft />
     {/* To fix Hydration failed  */}
     <ClientOnly>
-      <CartProvider>
-        <HeaderRight />
-      </CartProvider>
+      <HeaderRight />
     </ClientOnly>
   </div>
 );

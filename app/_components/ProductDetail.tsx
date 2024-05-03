@@ -24,7 +24,6 @@ const ProductDetail: FC<IProductDetail> = ({ product }) => {
 
   const jwt = getCookie("jwt");
   const user: IUser | null = getUserFromCookies();
-  console.log("ProductDetail, user: ", user);
 
   const { getUserCart } = useContext(CartContext);
 
@@ -35,7 +34,6 @@ const ProductDetail: FC<IProductDetail> = ({ product }) => {
   const getAmount = () => (quantity * product.attributes.price || product.attributes.mrp).toFixed(2);
 
   const addToCart = () => {
-    console.log(jwt);
     if (!jwt || !user) {
       router.push("/login");
       return;
@@ -51,7 +49,7 @@ const ProductDetail: FC<IProductDetail> = ({ product }) => {
     };
     addToCartRequest(data, jwt)
       .then((resp) => {
-        console.log("Added to Cart:", resp);
+        console.log("Added to Cart result:", resp);
         toast("Added to Cart");
       })
       .catch((e) => {

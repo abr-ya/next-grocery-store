@@ -1,5 +1,6 @@
 "use client";
 
+import { useContext, useEffect } from "react";
 import { ShoppingBasket } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -9,7 +10,6 @@ import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger 
 import UserMenu from "./UserMenu";
 import CartAsList from "./CartAsList";
 import { Button } from "@/components/ui/button";
-import { useContext, useEffect } from "react";
 import { getUserFromCookies } from "../_utils/utils";
 import { IUser } from "../_interfaces/user.interface";
 import { TextLoader } from ".";
@@ -23,24 +23,19 @@ const HeaderRight = () => {
   const { getUserCart, data, loading, count } = useContext(CartContext);
 
   useEffect(() => {
-    console.log(jwt ? "isUser" : "isGuest");
-    getUserCart(user?.id, jwt);
-  }, [pathname]);
-
-  useEffect(() => {
-    console.log(count);
-  }, [count]);
+    console.log(pathname, jwt ? "isUser" : "isGuest");
+    if (user?.id && jwt) getUserCart(user?.id, jwt);
+  }, [jwt]);
 
   const subtotal = data.reduce((sum, el) => sum + el.amount, 0);
 
-  const renderUserButton = () =>
-    !jwt ? (
-      <Link href={"/login"}>
-        <Button>Login</Button>
-      </Link>
-    ) : (
-      <UserMenu />
-    );
+  const renderUserButton = () => {
+    // only for compact)
+    // eslint-disable-next-line prettier/prettier
+    if (!jwt) return <Link href={"/login"}><Button>Login</Button></Link>;
+
+    return <UserMenu />;
+  };
 
   const renderCartSheet = (count: number) => {
     if (!jwt) return null;

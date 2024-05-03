@@ -1,48 +1,50 @@
 "use client";
 
-import { createContext, useState } from "react";
+import { FC, ReactNode, createContext, useState } from "react";
 import { getUserCartRequest } from "../_api/strapi";
+import { IAppCartItem } from "../_interfaces/cart.interface";
 
-const CartContext = createContext({
+type CartContextType = ReturnType<typeof CartManager>;
+
+const CartContext = createContext<CartContextType>({
   data: [],
   count: 0,
   loading: false,
-  getUserCart: () => false,
+  getUserCart: async () => undefined,
 });
 
-export const CartProvider = ({ children }) => {
-  const [data, setData] = useState([]);
+// split Context to Manager + Provider like Jack No BS TS #25
+// for example react-feedback-ts/blob/master/src/context/FeedbackContext.tsx
+export const CartManager = (initialCart: IAppCartItem[]) => {
+  const [data, setData] = useState(initialCart);
   const [loading, setLoading] = useState(false);
   const [count, setCount] = useState(0);
 
-  const getUserCart = async (userId, token) => {
-    console.log("cartContext ==> getUserCart");
-
+  const getUserCart = async (userId: number, token: string) => {
     if (!userId || !token) {
       console.log("No userId || !token == cart is empty!");
       setData([]);
       setCount(0);
-      return;
+    } else {
+      setLoading(true);
+      const userCart = await getUserCartRequest(userId, token);
+      const count = userCart.length;
+      console.log("new count ==", count);
+
+      setTimeout(() => {
+        setLoading(false);
+        setData(userCart);
+        setCount(count);
+        console.log(userCart);
+      }, 400);
     }
-
-    setLoading(true);
-    const userCart = await getUserCartRequest(userId, token);
-    setTimeout(() => {
-      setLoading(false);
-      setData(userCart);
-      setCount(userCart.length);
-      console.log(userCart);
-    }, 400);
   };
 
-  const context = {
-    data,
-    count,
-    loading,
-    getUserCart,
-  };
-
-  return <CartContext.Provider value={context}>{children}</CartContext.Provider>;
+  return { data, count, loading, getUserCart };
 };
+
+export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => (
+  <CartContext.Provider value={CartManager([])}>{children}</CartContext.Provider>
+);
 
 export default CartContext;

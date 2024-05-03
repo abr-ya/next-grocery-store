@@ -14,7 +14,7 @@ const CartAsList: FC<ICartAsList> = ({ data, deleteHandler }) => (
   <div>
     <div className="h-[500px] overflow-auto">
       {data.map(({ title, image, quantity, amount, id }) => (
-        <div className="flex justify-between items-center p-2 mb-2">
+        <div className="flex justify-between items-center p-2 mb-2" key={`cartItem${id}`}>
           <div className="flex gap-4 items-center">
             <Image src={`${backUrl}${image}`} width={64} height={64} alt={title} className="border p-2" />
             <div className="flex flex-col">

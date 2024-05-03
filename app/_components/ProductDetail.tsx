@@ -8,8 +8,6 @@ import { Button } from "@/components/ui/button";
 import { ShoppingBasket } from "lucide-react";
 import { getCookie } from "cookies-next";
 import { IAddToCartData } from "../_interfaces/cart.interface";
-import { addToCartRequest } from "../_api/strapi";
-import { toast } from "sonner";
 import { IUser } from "../_interfaces/user.interface";
 import { backUrl, getUserFromCookies } from "../_utils/utils";
 import { TextLoader } from ".";
@@ -23,41 +21,26 @@ const ProductDetail: FC<IProductDetail> = ({ product }) => {
   const jwt = getCookie("jwt");
   const user: IUser | null = getUserFromCookies();
 
-  const { getUserCart } = useContext(CartContext);
+  const { addToCart, loading } = useContext(CartContext);
 
   const router = useRouter();
   const [quantity, setQuantity] = useState(1);
-  const [loading, setLoading] = useState(false);
 
   const getAmount = () => (quantity * product.attributes.price || product.attributes.mrp).toFixed(2);
 
-  const addToCart = () => {
-    if (!jwt || !user) {
+  const addToCartHandler = () => {
+    if (jwt && user) {
+      const data: IAddToCartData = {
+        quantity,
+        amount: getAmount(),
+        product: product.id,
+        users_permissions_users: user.id,
+        userId: user.id,
+      };
+      addToCart(data, jwt);
+    } else {
       router.push("/login");
-      return;
     }
-
-    setLoading(true);
-    const data: IAddToCartData = {
-      quantity,
-      amount: getAmount(),
-      product: product.id,
-      users_permissions_users: user.id,
-      userId: user.id,
-    };
-    addToCartRequest(data, jwt)
-      .then((resp) => {
-        console.log("Added to Cart result:", resp);
-        toast("Added to Cart");
-      })
-      .catch((e) => {
-        console.log("addToCartRequest", e);
-        toast("Error while adding into cart");
-      })
-      .finally(() => {
-        setLoading(false);
-        getUserCart(user?.id, jwt);
-      });
   };
 
   return (
@@ -90,7 +73,7 @@ const ProductDetail: FC<IProductDetail> = ({ product }) => {
             </div>
             <span className="text-2xl font-bold"> = ${getAmount()}</span>
           </div>
-          <Button className="flex gap-3" onClick={() => addToCart()} disabled={loading}>
+          <Button className="flex gap-3" onClick={addToCartHandler} disabled={loading}>
             <ShoppingBasket />
             <TextLoader loading={loading} text="Add to Cart" />
           </Button>

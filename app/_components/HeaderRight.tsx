@@ -29,6 +29,10 @@ const HeaderRight = () => {
 
   const subtotal = data.reduce((sum, el) => sum + el.amount, 0);
 
+  const deleteItemHandler = (id: number) => {
+    console.log("delete", id);
+  };
+
   const renderUserButton = () => {
     // only for compact)
     // eslint-disable-next-line prettier/prettier
@@ -54,7 +58,7 @@ const HeaderRight = () => {
           <SheetHeader>
             <SheetTitle className="bg-primary text-white font-bold text-lg p-2">My Cart</SheetTitle>
           </SheetHeader>
-          <CartAsList cartItemList={false} onDeleteItem={false} />
+          <CartAsList data={data} deleteHandler={deleteItemHandler} />
           <SheetClose asChild>
             <div className="absolute w-[90%] bottom-6 flex flex-col">
               <h2 className="text-lg font-bold flex justify-between">

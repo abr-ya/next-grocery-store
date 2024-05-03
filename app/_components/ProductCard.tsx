@@ -3,14 +3,13 @@ import Image from "next/image";
 
 import { IProduct } from "../_interfaces/product.interface";
 import { ProductCardDialog } from ".";
+import { backUrl } from "../_utils/utils";
 
 interface IProductCard {
   product: IProduct;
 }
 
 const ProductCard: FC<IProductCard> = ({ product }) => {
-  const backUrl = process.env.NEXT_PUBLIC_API_URL;
-
   // todo move to ??
   const flexCenter = "flex flex-col items-center justify-center";
   const cardHover = "hover:scale-105 hover:shadow-lg transition-all ease-in-out cursor-pointer";

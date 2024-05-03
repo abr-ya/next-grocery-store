@@ -11,7 +11,7 @@ import { IAddToCartData } from "../_interfaces/cart.interface";
 import { addToCartRequest } from "../_api/strapi";
 import { toast } from "sonner";
 import { IUser } from "../_interfaces/user.interface";
-import { getUserFromCookies } from "../_utils/utils";
+import { backUrl, getUserFromCookies } from "../_utils/utils";
 import { TextLoader } from ".";
 import CartContext from "../_context/cartContext";
 
@@ -20,8 +20,6 @@ interface IProductDetail {
 }
 
 const ProductDetail: FC<IProductDetail> = ({ product }) => {
-  const backUrl = process.env.NEXT_PUBLIC_API_URL;
-
   const jwt = getCookie("jwt");
   const user: IUser | null = getUserFromCookies();
 

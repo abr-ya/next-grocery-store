@@ -3,7 +3,7 @@
 import { useContext, useEffect } from "react";
 import { ShoppingBasket } from "lucide-react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { getCookie } from "cookies-next";
 
 import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -16,6 +16,7 @@ import { TextLoader } from ".";
 import CartContext from "../_context/cartContext";
 
 const HeaderRight = () => {
+  const router = useRouter();
   const pathname = usePathname();
   const jwt = getCookie("jwt");
   const user: IUser | null = getUserFromCookies();
@@ -37,6 +38,8 @@ const HeaderRight = () => {
       console.log("Can't delete == no token or userId");
     }
   };
+
+  const checkoutHandler = () => router.push("/checkout");
 
   const renderUserButton = () => {
     // only for compact)
@@ -70,7 +73,7 @@ const HeaderRight = () => {
                 Subtotal
                 <span>${subtotal}</span>
               </h2>
-              <Button>Checkout</Button>
+              <Button onClick={checkoutHandler}>Checkout</Button>
             </div>
           </SheetClose>
         </SheetContent>

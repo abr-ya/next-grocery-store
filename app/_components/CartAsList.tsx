@@ -18,9 +18,9 @@ const CartAsList: FC<ICartAsList> = ({ data, deleteHandler }) => (
           <div className="flex gap-4 items-center">
             <Image src={`${backUrl}${image}`} width={64} height={64} alt={title} className="border p-2" />
             <div className="flex flex-col">
-              <h3 className="font-bold">{title}</h3>
+              <h3 className="font-bold leading-4">{title}</h3>
               <span>Quantity {quantity}</span>
-              <span className="font-bold">$ {amount}</span>
+              <span className="font-bold leading-4">$ {amount}</span>
             </div>
           </div>
           <TrashIcon className="cursor-pointer" onClick={() => deleteHandler(id)} />

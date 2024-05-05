@@ -8,7 +8,7 @@ const page = async ({ params: { catName } }: { params: { catName: string } }) =>
 
   return (
     <div>
-      <h2 className="p-4 bg-primary text-white font-bold text-3xl text-center mb-5">{catName}</h2>
+      <h1 className="page-header">{catName}</h1>
       <CategoryMenu data={categoryList} active={catName} />
       <div className="px-5 md:px-10">
         {productList?.length ? (

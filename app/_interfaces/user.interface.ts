@@ -19,3 +19,20 @@ export interface IUser {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface IUserAdress {
+  id: number;
+  attributes: IUserAdressAttributes;
+}
+
+export interface IUserAdressAttributes {
+  name: string;
+  email: string;
+  phone: string;
+  zip: number;
+  address: string;
+  userId: number;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}

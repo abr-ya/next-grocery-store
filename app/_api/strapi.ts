@@ -1,6 +1,6 @@
 import axios from "axios";
 import { ILoginPayload, IRegisterPayload } from "../_interfaces/user.interface";
-import { IAddToCartData, ICartItem } from "../_interfaces/cart.interface";
+import { IAddToCartData, ICartItem, ICreateOrderData } from "../_interfaces/cart.interface";
 import { normalizeCartItem } from "./normalize";
 
 const baseURL = `${process.env.NEXT_PUBLIC_API_URL}/api`;
@@ -24,6 +24,12 @@ export const registerRequest = (data: IRegisterPayload) => axiosClient.post("/au
 
 export const loginRequest = (data: ILoginPayload) => axiosClient.post("/auth/local", data);
 
+export const getUserAdresses = (userId: number) => {
+  const filters = `filters[userId][$eq]=${userId}`;
+
+  return axiosClient.get(`/user-adresses?${filters}`).then((resp) => resp.data.data);
+};
+
 // cart
 export const addToCartRequest = (data: IAddToCartData, jwt: string) =>
   axiosClient.post("/user-carts", { data }, optWithAuth(jwt));
@@ -39,5 +45,7 @@ export const getUserCartRequest = (userId: number, jwt: string) => {
   });
 };
 
-export const delFromCartRequest = (id: number, jwt: string) =>
-  axiosClient.delete(`/user-carts/${id}`, optWithAuth(jwt));
+export const delFromCartRequest = (id: number, to: string) => axiosClient.delete(`/user-carts/${id}`, optWithAuth(to));
+
+export const createOrder = (data: ICreateOrderData, jwt: string) =>
+  axiosClient.post("/orders", { data }, optWithAuth(jwt));

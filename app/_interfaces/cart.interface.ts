@@ -28,6 +28,14 @@ export interface IAppCartItem {
   quantity: number;
   amount: number;
   image: string;
-  mrp: number;
-  productId: number;
+  price: number;
+  product: number; // this is id
+}
+
+export interface ICreateOrderData {
+  user_adress: number;
+  total: number;
+  userId: number;
+  paymentId: string;
+  orderItemList: IAppCartItem[];
 }

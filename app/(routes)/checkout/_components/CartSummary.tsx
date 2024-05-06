@@ -43,7 +43,7 @@ const CartSummary = () => {
       createOrder(payload, jwt).then(() => {
         toast("Order Places Successfully!");
         // todo: clear User Cart!
-        // router.replace("/order-final");
+        router.push("/order-final");
       });
     } else {
       console.log("Can't Create Order ==> no token or userId!");
@@ -69,7 +69,8 @@ const CartSummary = () => {
           Total (rounds down): <span>${calculateTotalAmount()}</span>
         </h2>
         <Button onClick={onOrderCreate}>
-          Payment <ArrowBigRight />
+          {/* todo: Payment == add integration! */}
+          Create Order <ArrowBigRight />
         </Button>
       </div>
     </div>

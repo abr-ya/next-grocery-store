@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { deleteCookie } from "cookies-next";
 import { CircleUserRound } from "lucide-react";
+import Link from "next/link";
 
 const UserMenu = () => {
   const router = useRouter();
@@ -27,8 +28,12 @@ const UserMenu = () => {
       <DropdownMenuContent>
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Profile</DropdownMenuItem>
-        <DropdownMenuItem>My Order</DropdownMenuItem>
+        <Link href={"/profile"}>
+          <DropdownMenuItem>Profile</DropdownMenuItem>
+        </Link>
+        <Link href={"/orders"}>
+          <DropdownMenuItem>My Orders</DropdownMenuItem>
+        </Link>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={onLogout}>Logout</DropdownMenuItem>
       </DropdownMenuContent>

@@ -3,11 +3,14 @@
 import { getCookie } from "cookies-next";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import moment from "moment";
 
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { IUser } from "@/app/_interfaces/user.interface";
 import { getUserFromCookies } from "@/app/_utils/utils";
 import { getUserOrdersRequest } from "@/app/_api/strapi";
 import { IAppOrder } from "@/app/_interfaces/order.interface";
+import OrderItems from "./OrderItems";
 
 const OrdersList = () => {
   const router = useRouter();
@@ -37,9 +40,26 @@ const OrdersList = () => {
   return (
     <div>
       {orderList.map((order) => (
-        <p key={order.id}>
-          order {order.id} == total: {order.total}
-        </p>
+        <Collapsible key={order.id}>
+          <CollapsibleTrigger>
+            <div className="border p-2 bg-slate-100 flex gap-24">
+              <h2>
+                <span className="font-bold mr-2">Order ID: </span>
+                {order.id}
+              </h2>
+              <h2>
+                <span className="font-bold mr-2">Order Date: </span>
+                {moment(order?.createdAt).format("DD MMM yyy HH:mm")}
+              </h2>
+              <h2>
+                <span className="font-bold mr-2">Total Amount:</span> {order.total}
+              </h2>
+            </div>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <OrderItems data={order.itemList} />
+          </CollapsibleContent>
+        </Collapsible>
       ))}
     </div>
   );

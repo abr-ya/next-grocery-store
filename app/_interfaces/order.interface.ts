@@ -10,7 +10,7 @@ export interface ICreateOrderData {
   orderItemList: IAppCartItem[];
 }
 
-interface IOrderPosition {
+export interface IOrderItem {
   id: number;
   price: number;
   product: { data: IProduct }; // relation
@@ -20,7 +20,7 @@ interface IOrderPosition {
 interface IOrderAttributes {
   createdAt: string;
   updatedAt: string;
-  orderItemList: IOrderPosition[];
+  orderItemList: IOrderItem[];
   paymentId: string;
   total: number;
   userId: number;
@@ -41,6 +41,6 @@ export interface IAppOrder {
   id: number;
   total: number;
   paymentId: string;
-  itemList: IOrderPosition[];
+  itemList: IOrderItem[];
   createdAt: string;
 }

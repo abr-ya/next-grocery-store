@@ -12,6 +12,7 @@ import { getUserFromCookies } from "@/app/_utils/utils";
 import { IUser } from "@/app/_interfaces/user.interface";
 import { createOrder } from "@/app/_api/strapi";
 import { toast } from "sonner";
+import { ICreateOrderData } from "@/app/_interfaces/order.interface";
 
 const CartSummary = () => {
   const router = useRouter();
@@ -30,7 +31,7 @@ const CartSummary = () => {
 
   const onOrderCreate = () => {
     if (user?.id && jwt) {
-      const payload = {
+      const payload: ICreateOrderData = {
         user_adress: 1, // todo: add real!
         paymentId: "todo",
         total: calculateTotalAmount(),
@@ -71,7 +72,7 @@ const CartSummary = () => {
         <h2 className="font-bold flex justify-between">
           Total (rounds down): <span>${calculateTotalAmount()}</span>
         </h2>
-        <Button onClick={onOrderCreate}>
+        <Button onClick={onOrderCreate} disabled={subtotal === 0}>
           {/* todo: Payment == add integration! */}
           Create Order <ArrowBigRight />
         </Button>

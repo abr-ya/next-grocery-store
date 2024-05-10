@@ -1,7 +1,8 @@
 import axios from "axios";
 import { ILoginPayload, IRegisterPayload } from "../_interfaces/user.interface";
-import { IAddToCartData, ICartItem, ICreateOrderData } from "../_interfaces/cart.interface";
-import { normalizeCartItem } from "./normalize";
+import { IAddToCartData, ICartItem } from "../_interfaces/cart.interface";
+import { normalizeCartItem, normalizeOrder } from "./normalize";
+import { ICreateOrderData, IOrder } from "../_interfaces/order.interface";
 
 const baseURL = `${process.env.NEXT_PUBLIC_API_URL}/api`;
 
@@ -48,5 +49,18 @@ export const getUserCartRequest = (userId: number, jwt: string) => {
 export const delFromCartRequest = (id: number, jwt: string) =>
   axiosClient.delete(`/user-carts/${id}`, optWithAuth(jwt));
 
+// orders
 export const createOrder = (data: ICreateOrderData, jwt: string) =>
   axiosClient.post("/orders", { data }, optWithAuth(jwt));
+
+export const getUserOrdersRequest = (userId: number, jwt: string) => {
+  const filters = `filters[userId][$eq]=${userId}`;
+  const populate = "populate[user_adress][populate]&populate[orderItemList][populate][product][populate][images]=url";
+
+  return axiosClient.get(`/orders?${filters}&${populate}`, optWithAuth(jwt)).then((resp) => {
+    const data: IOrder[] = resp.data.data;
+
+    console.log(data);
+    return data.map((item) => normalizeOrder(item));
+  });
+};

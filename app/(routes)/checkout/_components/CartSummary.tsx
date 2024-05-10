@@ -22,7 +22,7 @@ const CartSummary = () => {
     if (!jwt) router.push("/login");
   }, []);
 
-  const { data, count } = useContext(CartContext);
+  const { data, count, deleteArrFromCart } = useContext(CartContext);
 
   const subtotal = data.reduce((sum, el) => sum + el.amount, 0);
 
@@ -42,7 +42,10 @@ const CartSummary = () => {
 
       createOrder(payload, jwt).then(() => {
         toast("Order Places Successfully!");
-        // todo: clear User Cart!
+        // clear User Cart!
+        const delArray = payload.orderItemList.map((el) => el.id);
+        console.log(delArray);
+        deleteArrFromCart(delArray, payload.userId, jwt);
         router.push("/order-final");
       });
     } else {

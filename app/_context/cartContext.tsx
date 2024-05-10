@@ -13,6 +13,7 @@ const CartContext = createContext<CartContextType>({
   loading: false,
   addToCart: async () => undefined,
   deleteFromCart: async () => undefined,
+  deleteArrFromCart: async () => undefined,
   getUserCart: async () => undefined,
 });
 
@@ -78,7 +79,24 @@ export const CartManager = (initialCart: IAppCartItem[]) => {
       });
   };
 
-  return { data, count, loading, addToCart, deleteFromCart, getUserCart };
+  const deleteArrFromCart = async (ids: Array<number>, userId: number, token: string) => {
+    setLoading(true);
+    const requests = ids.map((id) => delFromCartRequest(id, token));
+    Promise.all(requests)
+      .then((resp) => {
+        console.log("Deleted Array from Cart result:", resp);
+      })
+      .catch((e) => {
+        console.log("deleteArrFromCart", e);
+        toast("Error while deleted Array from Cart");
+      })
+      .finally(() => {
+        setLoading(false);
+        getUserCart(userId, token);
+      });
+  };
+
+  return { data, count, loading, addToCart, deleteFromCart, deleteArrFromCart, getUserCart };
 };
 
 export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => (

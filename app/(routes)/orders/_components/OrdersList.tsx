@@ -42,18 +42,19 @@ const OrdersList = () => {
       {orderList.map((order) => (
         <Collapsible key={order.id}>
           <CollapsibleTrigger>
-            <div className="border p-2 bg-slate-100 flex gap-24">
-              <h2>
+            <div className="border p-2 bg-slate-100 flex gap-12">
+              {/* todo: w for mobile?! */}
+              <div className="w-32">
                 <span className="font-bold mr-2">Order ID: </span>
                 {order.id}
-              </h2>
-              <h2>
+              </div>
+              <div className="w-60">
                 <span className="font-bold mr-2">Order Date: </span>
                 {moment(order?.createdAt).format("DD MMM yyy HH:mm")}
-              </h2>
-              <h2>
+              </div>
+              <div className="w-40">
                 <span className="font-bold mr-2">Total Amount:</span> {order.total}
-              </h2>
+              </div>
             </div>
           </CollapsibleTrigger>
           <CollapsibleContent>

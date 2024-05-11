@@ -6,7 +6,7 @@ export interface IProduct {
   attributes: IProductAttributes;
 }
 
-interface IProductAttributes {
+export interface IProductAttributes {
   title: string;
   description: string;
   mrp: number;

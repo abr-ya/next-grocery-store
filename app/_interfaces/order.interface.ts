@@ -1,5 +1,5 @@
 import { IAppCartItem } from "./cart.interface";
-import { IProduct } from "./product.interface";
+import { IProduct, IProductAttributes } from "./product.interface";
 import { IUserAdressAttributes } from "./user.interface";
 
 export interface ICreateOrderData {
@@ -37,10 +37,17 @@ export interface IOrder {
   attributes: IOrderAttributes;
 }
 
+export interface IAppOrderItem {
+  id: number;
+  price: number;
+  product: IProductAttributes;
+  quantity: number;
+}
+
 export interface IAppOrder {
   id: number;
   total: number;
   paymentId: string;
-  itemList: IOrderItem[];
+  itemList: IAppOrderItem[];
   createdAt: string;
 }

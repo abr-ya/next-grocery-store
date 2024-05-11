@@ -60,7 +60,6 @@ export const getUserOrdersRequest = (userId: number, jwt: string) => {
   return axiosClient.get(`/orders?${filters}&${populate}`, optWithAuth(jwt)).then((resp) => {
     const data: IOrder[] = resp.data.data;
 
-    console.log(data);
     return data.map((item) => normalizeOrder(item));
   });
 };

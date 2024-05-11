@@ -1,5 +1,5 @@
 import { IAppCartItem, ICartItem } from "../_interfaces/cart.interface";
-import { IAppOrder, IOrder } from "../_interfaces/order.interface";
+import { IAppOrder, IOrder, IOrderItem } from "../_interfaces/order.interface";
 
 export const normalizeCartItem = (item: ICartItem) => {
   const newItem: IAppCartItem = {
@@ -15,12 +15,21 @@ export const normalizeCartItem = (item: ICartItem) => {
   return newItem;
 };
 
+const normalizeOrderItem = ({ id, price, quantity, product }: IOrderItem) => {
+  return {
+    id,
+    price,
+    quantity,
+    product: product.data.attributes,
+  };
+};
+
 export const normalizeOrder = (order: IOrder) => {
   const newItem: IAppOrder = {
     id: order.id,
     total: order.attributes.total,
     paymentId: order.attributes.paymentId,
-    itemList: order.attributes.orderItemList,
+    itemList: order.attributes.orderItemList.map((item) => normalizeOrderItem(item)),
     createdAt: order.attributes.createdAt,
   };
 

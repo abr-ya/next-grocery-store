@@ -7,7 +7,7 @@ import { IProduct } from "../_interfaces/product.interface";
 import { Button } from "@/components/ui/button";
 import { ShoppingBasket } from "lucide-react";
 import { getCookie } from "cookies-next";
-import { IAddToCartData } from "../_interfaces/cart.interface";
+import { IAddToCartData, IAppCartItem } from "../_interfaces/cart.interface";
 import { IUser } from "../_interfaces/user.interface";
 import { backUrl, getUserFromCookies } from "../_utils/utils";
 import { TextLoader } from ".";
@@ -21,14 +21,17 @@ const ProductDetail: FC<IProductDetail> = ({ product }) => {
   const jwt = getCookie("jwt");
   const user: IUser | null = getUserFromCookies();
 
-  const { addToCart, loading } = useContext(CartContext);
+  const { addToCart, data, loading } = useContext(CartContext);
+  const prodInCart: IAppCartItem | undefined = data.filter((el) => el.product === product.id)[0];
+  // const isInCart = !!prodInCart.length;
+  console.log(prodInCart);
 
   const router = useRouter();
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(prodInCart ? prodInCart.quantity : 1);
 
   const getAmount = () => (quantity * product.attributes.price || product.attributes.mrp).toFixed(2);
 
-  const addToCartHandler = () => {
+  const changeCartHandler = () => {
     if (jwt && user) {
       const data: IAddToCartData = {
         quantity,
@@ -37,11 +40,19 @@ const ProductDetail: FC<IProductDetail> = ({ product }) => {
         users_permissions_users: user.id,
         userId: user.id,
       };
-      addToCart(data, jwt);
+      if (prodInCart) {
+        // todo: Update Reqest
+        console.log("update!", data);
+      } else {
+        addToCart(data, jwt);
+      }
     } else {
       router.push("/login");
     }
   };
+
+  const isButtonDisable = loading || prodInCart?.quantity === quantity;
+  const buttonLabel = `${!prodInCart ? "Add to" : "Update"} Cart`;
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 p-2 gap-4 bg-white text-black">
@@ -73,9 +84,9 @@ const ProductDetail: FC<IProductDetail> = ({ product }) => {
             </div>
             <span className="text-2xl font-bold"> = ${getAmount()}</span>
           </div>
-          <Button className="flex gap-3" onClick={addToCartHandler} disabled={loading}>
+          <Button className="flex gap-3" onClick={changeCartHandler} disabled={isButtonDisable}>
             <ShoppingBasket />
-            <TextLoader loading={loading} text="Add to Cart" />
+            <TextLoader loading={loading} text={buttonLabel} />
           </Button>
         </div>
         <span>

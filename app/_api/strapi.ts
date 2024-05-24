@@ -49,6 +49,9 @@ export const getUserCartRequest = (userId: number, jwt: string) => {
 export const delFromCartRequest = (id: number, jwt: string) =>
   axiosClient.delete(`/user-carts/${id}`, optWithAuth(jwt));
 
+export const updateCartRequest = (data: IAddToCartData, id: number, jwt: string) =>
+  axiosClient.put(`/user-carts/${id}`, { data }, optWithAuth(jwt));
+
 // orders
 export const createOrder = (data: ICreateOrderData, jwt: string) =>
   axiosClient.post("/orders", { data }, optWithAuth(jwt));

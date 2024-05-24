@@ -12,6 +12,7 @@ import { IUser } from "../_interfaces/user.interface";
 import { backUrl, getUserFromCookies } from "../_utils/utils";
 import { TextLoader } from ".";
 import CartContext from "../_context/cartContext";
+import { updateCartRequest } from "../_api/strapi";
 
 interface IProductDetail {
   product: IProduct;
@@ -23,7 +24,6 @@ const ProductDetail: FC<IProductDetail> = ({ product }) => {
 
   const { addToCart, data, loading } = useContext(CartContext);
   const prodInCart: IAppCartItem | undefined = data.filter((el) => el.product === product.id)[0];
-  // const isInCart = !!prodInCart.length;
   console.log(prodInCart);
 
   const router = useRouter();
@@ -41,8 +41,8 @@ const ProductDetail: FC<IProductDetail> = ({ product }) => {
         userId: user.id,
       };
       if (prodInCart) {
-        // todo: Update Reqest
         console.log("update!", data);
+        updateCartRequest(data, prodInCart.id, jwt); // todo: to Context, Update All Cart!
       } else {
         addToCart(data, jwt);
       }
